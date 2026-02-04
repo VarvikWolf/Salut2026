@@ -1,0 +1,1730 @@
+/* ============================================
+   ОСНОВНЫЕ СТИЛИ САЙТА "ГРАФИКИ ПОВЕРКИ"
+   Версия 2.0 - С увеличенными столбцами и исправленными модальными окнами
+   ============================================ */
+
+/* 1. ОБЩИЕ СТИЛИ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+}
+
+/* 2. ШАПКА */
+header {
+    background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+    color: white;
+    padding: 30px 40px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    transform: translate(50px, -50px);
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+header h1 i {
+    font-size: 2.2rem;
+    color: #3498db;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-left: 45px;
+    font-weight: 300;
+}
+
+/* 3. ГЛАВНАЯ НАВИГАЦИЯ */
+.main-nav {
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.main-nav ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.main-nav li {
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid #eee;
+}
+
+.main-nav li:last-child {
+    border-right: none;
+}
+
+.main-nav a {
+    display: block;
+    padding: 20px 15px;
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+    font-size: 1rem;
+}
+
+.main-nav a:hover {
+    background: #f8f9fa;
+    color: #3498db;
+    border-bottom: 3px solid #3498db;
+}
+
+.main-nav a.active {
+    background: #3498db;
+    color: white;
+    border-bottom: 3px solid #2c3e50;
+}
+
+.main-nav i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+/* 4. КАРТОЧКИ ГОДОВ */
+.year-cards {
+    margin-bottom: 40px;
+}
+
+.year-cards h2 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.8rem;
+}
+
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.year-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.year-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.card-header {
+    padding: 25px;
+    background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h3 {
+    font-size: 2.2rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+.badge {
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge.upcoming {
+    background: #f39c12;
+    color: white;
+}
+
+.badge.current {
+    background: #2ecc71;
+    color: white;
+}
+
+.badge.completed {
+    background: #95a5a6;
+    color: white;
+}
+
+.card-content {
+    padding: 25px;
+    flex-grow: 1;
+}
+
+.card-content p {
+    margin: 12px 0;
+    color: #7f8c8d;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1rem;
+}
+
+.card-btn {
+    display: block;
+    background: #3498db;
+    color: white;
+    text-align: center;
+    padding: 18px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: background 0.3s ease;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.card-btn:hover {
+    background: #2980b9;
+}
+
+.card-btn i {
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+.card-btn:hover i {
+    transform: translateX(5px);
+}
+
+/* 5. БЫСТРАЯ СТАТИСТИКА */
+.quick-stats {
+    margin-bottom: 40px;
+}
+
+.quick-stats h2 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.8rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.stat-card i {
+    font-size: 2.8rem;
+    color: #3498db;
+    margin-bottom: 20px;
+}
+
+.stat-card h4 {
+    color: #2c3e50;
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+}
+
+.stat-card p {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+/* 6. КОНТЕЙНЕРЫ ДЛЯ ТАБЛИЦ */
+.table-container {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+/* 7. ВКЛАДКИ ТАБЛИЦ */
+.table-tabs {
+    display: flex;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    overflow-x: auto;
+    padding: 0 10px;
+}
+
+.table-tabs::-webkit-scrollbar {
+    height: 6px;
+}
+
+.table-tabs::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.table-tabs::-webkit-scrollbar-thumb {
+    background: #c3cfe2;
+    border-radius: 3px;
+}
+
+.table-tabs::-webkit-scrollbar-thumb:hover {
+    background: #a5b1d1;
+}
+
+.tab-btn {
+    padding: 16px 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    color: #495057;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    font-size: 1rem;
+    min-width: 120px;
+    text-align: center;
+}
+
+.tab-btn:hover {
+    background: #e9ecef;
+    color: #3498db;
+}
+
+.tab-btn.active {
+    background: white;
+    color: #3498db;
+    border-bottom: 3px solid #3498db;
+    font-weight: 600;
+}
+
+/* 8. ПАНЕЛЬ ИНСТРУМЕНТОВ ТАБЛИЦ */
+.table-toolbar {
+    background: #f8f9fa;
+    padding: 18px 25px;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.tool-btn {
+    padding: 10px 18px;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #495057;
+}
+
+.tool-btn:hover {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+    transform: translateY(-2px);
+}
+
+.tool-btn:active {
+    transform: translateY(0);
+}
+
+.tool-btn i {
+    font-size: 1.1rem;
+}
+
+/* 9. ОБОЛОЧКА ТАБЛИЦЫ */
+.table-wrapper {
+    padding: 25px;
+    overflow-x: auto;
+    position: relative;
+}
+
+.table-wrapper::-webkit-scrollbar {
+    height: 12px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 6px;
+    margin: 0 5px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: #3498db;
+    border-radius: 6px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #2980b9;
+}
+
+/* 10. ТАБЛИЦЫ С ДАННЫМИ - УВЕЛИЧЕННЫЕ СТОЛБЦЫ */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1400px;
+    font-size: 1rem;
+}
+
+.data-table th {
+    background: #3498db;
+    color: white;
+    padding: 18px 16px;
+    text-align: left;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    font-size: 1.05rem;
+    min-width: 130px;
+}
+
+.data-table th:last-child {
+    border-right: none;
+}
+
+.data-table td {
+    padding: 15px 16px;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+    min-width: 130px;
+    max-width: 300px;
+    word-wrap: break-word;
+}
+
+.data-table tr:hover {
+    background: #f8f9fa;
+}
+
+.data-table tr:nth-child(even) {
+    background: #fafbfc;
+}
+
+/* 11. СПЕЦИФИЧНЫЕ ШИРИНЫ СТОЛБЦОВ ДЛЯ РАЗНЫХ ТАБЛИЦ */
+
+/* Для таблицы геометрии (12 столбцов) */
+#geometryTable {
+    min-width: 1600px;
+}
+
+#geometryTable th:nth-child(1),
+#geometryTable td:nth-child(1) {
+    min-width: 220px; /* Наименование */
+    max-width: 280px;
+}
+
+#geometryTable th:nth-child(11),
+#geometryTable td:nth-child(11) {
+    min-width: 280px; /* Примечание */
+    max-width: 350px;
+}
+
+/* Для общей таблицы ТС */
+#allDevicesTable {
+    min-width: 1700px;
+}
+
+#allDevicesTable th:nth-child(3),
+#allDevicesTable td:nth-child(3) {
+    min-width: 200px; /* Наименование */
+    max-width: 300px;
+}
+
+/* Для таблицы ТСМИ (7 столбцов) */
+#tsmiTable {
+    min-width: 1400px;
+}
+
+#tsmiTable th:nth-child(1),
+#tsmiTable td:nth-child(1) {
+    min-width: 250px; /* Наименование */
+    max-width: 300px;
+}
+
+#tsmiTable th:nth-child(3),
+#tsmiTable td:nth-child(3) {
+    min-width: 220px; /* Класс точности */
+    max-width: 250px;
+}
+
+#tsmiTable th:nth-child(6),
+#tsmiTable td:nth-child(6) {
+    min-width: 180px; /* Операция */
+    max-width: 200px;
+}
+
+/* 12. КНОПКИ ДЕЙСТВИЙ В ТАБЛИЦЕ */
+.action-btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 0 4px;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.action-btn i {
+    font-size: 1.1rem;
+}
+
+.action-btn.edit {
+    background: #3498db;
+    color: white;
+}
+
+.action-btn.edit:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.action-btn.delete {
+    background: #e74c3c;
+    color: white;
+}
+
+.action-btn.delete:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+.action-btn.view {
+    background: #2ecc71;
+    color: white;
+}
+
+.action-btn.view:hover {
+    background: #27ae60;
+    transform: translateY(-2px);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+}
+
+/* 13. ВЫДЕЛЕНИЕ СТРОК */
+.data-table tr.selected {
+    background-color: #e3f2fd !important;
+    box-shadow: inset 0 0 0 2px #3498db;
+}
+
+/* 14. РЕДАКТИРУЕМЫЕ ЯЧЕЙКИ */
+[contenteditable="true"] {
+    outline: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+[contenteditable="true"]:focus {
+    outline: 2px solid #3498db;
+    background: #fffde7;
+}
+
+/* 15. ВЫПАДАЮЩИЕ СПИСКИ В ТАБЛИЦЕ */
+.table-select {
+    padding: 10px 14px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background: white;
+    width: 100%;
+    font-size: 1rem;
+    min-height: 44px;
+    cursor: pointer;
+    transition: border 0.3s ease;
+}
+
+.table-select:hover {
+    border-color: #3498db;
+}
+
+.table-select:focus {
+    outline: 2px solid #3498db;
+    border-color: transparent;
+}
+
+/* 16. МОДАЛЬНЫЕ ОКНА - ИСПРАВЛЕННЫЕ */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-y: auto;
+    padding: 40px 20px;
+    backdrop-filter: blur(3px);
+}
+
+.modal-content {
+    background: white;
+    padding: 35px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 650px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    margin: auto;
+    position: relative;
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #eee;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #7f8c8d;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+    background: #f8f9fa;
+    color: #e74c3c;
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    margin-bottom: 25px;
+    max-height: calc(85vh - 200px);
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* 17. ФОРМЫ В МОДАЛЬНЫХ ОКНАХ */
+#deviceForm,
+#tsmiForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.05rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+/* 18. КНОПКИ В МОДАЛЬНЫХ ОКНАХ */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    padding-top: 25px;
+    border-top: 2px solid #eee;
+    position: sticky;
+    bottom: 0;
+    background: white;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 14px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    min-width: 160px;
+}
+
+.btn-primary:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: #95a5a6;
+    color: white;
+    border: none;
+    padding: 14px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.btn-secondary:hover {
+    background: #7f8c8d;
+    transform: translateY(-2px);
+}
+
+/* 19. СООБЩЕНИЯ (УВЕДОМЛЕНИЯ) */
+.message {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    padding: 18px 28px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    z-index: 1001;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 400px;
+}
+
+.message i {
+    font-size: 1.3rem;
+}
+
+.message.success {
+    background: #2ecc71;
+    border-left: 4px solid #27ae60;
+}
+
+.message.error {
+    background: #e74c3c;
+    border-left: 4px solid #c0392b;
+}
+
+.message.info {
+    background: #3498db;
+    border-left: 4px solid #2980b9;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* 20. ПАГИНАЦИЯ */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    margin: 30px 0;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    flex-wrap: wrap;
+}
+
+.pagination button {
+    padding: 12px 24px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.pagination button:hover:not(:disabled) {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.pagination button:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.page-info {
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    min-width: 140px;
+    text-align: center;
+}
+
+.total-info {
+    color: #7f8c8d;
+    font-size: 1rem;
+    min-width: 200px;
+    text-align: center;
+}
+
+/* 21. ФИЛЬТРЫ И ПОИСК */
+.filters {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.filters h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.4rem;
+}
+
+.filter-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    align-items: end;
+}
+
+.filter-controls input,
+.filter-controls select {
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    width: 100%;
+    background: white;
+}
+
+.filter-controls input:focus,
+.filter-controls select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.filter-controls button {
+    padding: 14px 25px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: all 0.3s ease;
+    height: fit-content;
+}
+
+.filter-controls button:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* 22. ИНСТРУКЦИИ */
+.instructions {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    margin: 25px 0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.instructions h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.5rem;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #eee;
+}
+
+.instructions ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.instructions li {
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+    color: #555;
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.instructions li:last-child {
+    border-bottom: none;
+}
+
+.instructions li strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* 23. ПОДВАЛ */
+footer {
+    margin-top: 50px;
+    text-align: center;
+    color: #7f8c8d;
+    padding: 25px;
+    border-top: 2px solid #eee;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+}
+
+footer p {
+    margin: 10px 0;
+    font-size: 1rem;
+}
+
+footer p:first-child {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* 24. КАТЕГОРИИ НА ГЛАВНОЙ (для index.html года) */
+.category-grid {
+    margin-bottom: 40px;
+}
+
+.category-grid h2 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.8rem;
+}
+
+.category-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.category-card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+    color: white;
+}
+
+.category-card:hover i,
+.category-card:hover h3,
+.category-card:hover p,
+.category-card:hover .count {
+    color: white;
+}
+
+.category-card i {
+    font-size: 2.8rem;
+    color: #3498db;
+    margin-bottom: 20px;
+}
+
+.category-card h3 {
+    color: #2c3e50;
+    margin-bottom: 12px;
+    font-size: 1.4rem;
+}
+
+.category-card p {
+    color: #7f8c8d;
+    margin-bottom: 20px;
+    flex-grow: 1;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.count {
+    background: #f8f9fa;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    color: #3498db;
+    font-size: 1.1rem;
+    margin-top: auto;
+}
+
+/* 25. СВОДКА */
+.summary {
+    margin-bottom: 40px;
+}
+
+.summary h2 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.8rem;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.summary-card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.summary-card h3 {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.summary-card .number {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #3498db;
+    margin: 15px 0;
+    line-height: 1;
+}
+
+.summary-card p:last-child {
+    color: #95a5a6;
+    font-size: 0.95rem;
+    margin-top: 10px;
+}
+
+/* 27. КАСТОМНЫЕ СКРОЛЛБАРЫ */
+.modal-content::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar {
+    width: 10px;
+}
+
+.modal-content::-webkit-scrollbar-track,
+.modal-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.modal-content::-webkit-scrollbar-thumb,
+.modal-body::-webkit-scrollbar-thumb {
+    background: #3498db;
+    border-radius: 5px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover,
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: #2980b9;
+}
+
+/* 28. АДАПТИВНОСТЬ */
+@media (max-width: 1200px) {
+    .container {
+        padding: 15px;
+        max-width: 100%;
+    }
+    
+    .cards-container {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+    
+    .stats-grid,
+    .summary-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 992px) {
+    header h1 {
+        font-size: 2.2rem;
+    }
+    
+    .subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .main-nav ul {
+        flex-direction: column;
+    }
+    
+    .main-nav li {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .main-nav li:last-child {
+        border-bottom: none;
+    }
+    
+    .cards-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .category-container {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: 25px;
+    }
+    
+    #deviceForm,
+    #tsmiForm {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 20px 25px;
+    }
+    
+    header h1 {
+        font-size: 1.8rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .subtitle {
+        margin-left: 0;
+    }
+    
+    .table-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .tool-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .filter-controls {
+        grid-template-columns: 1fr;
+    }
+    
+    .pagination {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .pagination button {
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    .page-info,
+    .total-info {
+        text-align: center;
+        width: 100%;
+    }
+    
+    .modal {
+        padding: 20px 10px;
+    }
+    
+    .modal-content {
+        padding: 20px;
+        max-height: 90vh;
+    }
+    
+    .modal-body {
+        max-height: calc(90vh - 180px);
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 10px;
+    }
+    
+    header {
+        padding: 15px 20px;
+        border-radius: 10px;
+    }
+    
+    header h1 {
+        font-size: 1.6rem;
+    }
+    
+    .year-card {
+        border-radius: 10px;
+    }
+    
+    .card-header {
+        padding: 20px;
+    }
+    
+    .card-content {
+        padding: 20px;
+    }
+    
+    .table-wrapper {
+        padding: 15px;
+    }
+    
+    .data-table th,
+    .data-table td {
+        padding: 12px 10px;
+        font-size: 0.95rem;
+    }
+    
+    .action-btn {
+        padding: 6px 10px;
+        margin: 0 2px;
+        min-width: 36px;
+        font-size: 0.9rem;
+    }
+    
+    .message {
+        top: 20px;
+        right: 20px;
+        left: 20px;
+        max-width: none;
+    }
+}
+
+@media print {
+    .main-nav,
+    .table-tabs,
+    .table-toolbar,
+    .instructions,
+    footer,
+    .tool-btn,
+    .action-btn,
+    .modal {
+        display: none !important;
+    }
+    
+    .table-container {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .table-wrapper {
+        overflow-x: visible;
+    }
+    
+    .data-table {
+        min-width: auto;
+        width: 100%;
+        font-size: 10pt;
+    }
+    
+    .data-table th {
+        background: #f0f0f0 !important;
+        color: black !important;
+        border: 1px solid #ddd;
+    }
+    
+    .data-table td {
+        border: 1px solid #ddd;
+    }
+    
+    .container {
+        max-width: 100%;
+        padding: 0;
+    }
+    
+    header {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+    }
+}
+
+/* 29. АНИМАЦИИ И ЭФФЕКТЫ ПРИ НАВЕДЕНИИ */
+.year-card,
+.stat-card,
+.category-card,
+.summary-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 30. ЗАГРУЗОЧНЫЙ ИНДИКАТОР (если понадобится) */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 31. ТЕНИ И ГРАДИЕНТЫ ДЛЯ ГЛУБИНЫ */
+.shadow-deep {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.gradient-primary {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+}
+
+.gradient-success {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+}
+
+/* 32. ПОЛЕЗНЫЕ УТИЛИТЫ */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.p-20 {
+    padding: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* 33. ИКОНКИ */
+.icon-large {
+    font-size: 2.5rem;
+}
+
+.icon-medium {
+    font-size: 1.8rem;
+}
+
+.icon-small {
+    font-size: 1.2rem;
+}
+
+/* 34. КАРТИНКИ И ИЛЛЮСТРАЦИИ */
+.illustration {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* 35. СПЕЦИАЛЬНЫЕ ЭФФЕКТЫ ДЛЯ ТАБЛИЦ */
+
+/* 36. СТИЛИ ДЛЯ ПУСТЫХ ТАБЛИЦ */
+.empty-table {
+    text-align: center;
+    padding: 60px 20px;
+    color: #7f8c8d;
+}
+
+.empty-table i {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    color: #bdc3c7;
+}
+
+.empty-table h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #95a5a6;
+}
+
+.empty-table p {
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* 37. КНОПКА "НАВЕРХ" */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    z-index: 999;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    transition: all 0.3s ease;
+}
+
+.back-to-top:hover {
+    background: #2980b9;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+/* 38. ПРОГРЕСС-БАР (если понадобится) */
+.progress-bar {
+    height: 6px;
+    background: #ecf0f1;
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #3498db;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+/* 39. ТУЛТИПЫ */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+
+.tooltip .tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #2c3e50 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* 40. ФИНАЛЬНЫЕ ШТРИХИ */
+::selection {
+    background-color: rgba(52, 152, 219, 0.3);
+    color: #2c3e50;
+}
+
+::-moz-selection {
+    background-color: rgba(52, 152, 219, 0.3);
+    color: #2c3e50;
+}
+
+/* Улучшенная читаемость для больших текстов */
+p, li, td {
+    line-height: 1.6;
+    letter-spacing: 0.3px;
+}
+
+/* Плавные переходы для всех интерактивных элементов */
+a, button, input, select, textarea {
+    transition: all 0.3s ease;
+}
+
+/* Улучшенный фокус для доступности */
+:focus {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+}
+
+/* БЛОКИРОВКА СТОЛБЦА "В" В ТАБЛИЦАХ */
+.data-table td:nth-child(10) { /* Столбец "В" (10-й столбец) */
+    background-color: #f8f9fa !important;
+    color: #999 !important;
+    font-style: italic;
+    pointer-events: none;
+    user-select: none;
+    text-align: center;
+}
+
+.data-table td:nth-child(10)[contenteditable="true"]:focus {
+    background-color: #f8f9fa !important;
+    outline: none !important;
+    cursor: not-allowed;
+}
+
+/* Для таблицы геометрии */
+#geometryTable td:nth-child(10) {
+    background-color: #f8f9fa !important;
+    color: #999 !important;
+    content: " ";
+    font-style: italic;
+    pointer-events: none;
+    user-select: none;
+    text-align: center;
+}
+
+/* Убрать возможность редактирования */
+#geometryTable td:nth-child(10)[contenteditable="true"] {
+    content: " " !important;
+}
+
+#geometryTable td:nth-child(10)[contenteditable="true"]:focus {
+    background-color: #f8f9fa !important;
+    outline: none !important;
+    cursor: not-allowed;
+}
+
+/* JavaScript для принудительной блокировки */
+.data-table td:nth-child(10):empty::before {
+    content: " ";
+    color: #999;
+    font-style: italic;
+}

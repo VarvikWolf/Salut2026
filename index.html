@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Графики поверки технических средств</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-calendar-alt"></i> Графики поверки технических средств</h1>
+            <p class="subtitle">Система управления графиками метрологического обслуживания</p>
+        </header>
+
+        <nav class="main-nav">
+            <ul>
+                <li><a href="common-devices.html"><i class="fas fa-list-alt"></i> Общий список ТС</a></li>
+                <li><a href="#"><i class="fas fa-print"></i> Отчеты</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> Настройки</a></li>
+                <li><a href="#"><i class="fas fa-question-circle"></i> Помощь</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section class="year-cards">
+                <h2><i class="fas fa-chart-line"></i> Графики по годам</h2>
+                <div class="cards-container">
+                    <div class="year-card">
+                        <div class="card-header">
+                            <h3>2026</h3>
+                            <span class="badge upcoming">Будущий</span>
+                        </div>
+                        <div class="card-content">
+                            <p><i class="fas fa-clock"></i> Планирование поверок</p>
+                            <p><i class="fas fa-tools"></i> 9 категорий оборудования</p>
+                        </div>
+                        <a href="2026/index.html" class="card-btn">Открыть график 2026 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="year-card">
+                        <div class="card-header">
+                            <h3>2025</h3>
+                            <span class="badge current">Текущий</span>
+                        </div>
+                        <div class="card-content">
+                            <p><i class="fas fa-calendar-check"></i> Активные поверки</p>
+                            <p><i class="fas fa-tools"></i> 9 категорий оборудования</p>
+                        </div>
+                        <a href="2025/index.html" class="card-btn">Открыть график 2025 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="year-card">
+                        <div class="card-header">
+                            <h3>2024</h3>
+                            <span class="badge completed">Завершен</span>
+                        </div>
+                        <div class="card-content">
+                            <p><i class="fas fa-history"></i> Архив поверок</p>
+                            <p><i class="fas fa-tools"></i> 9 категорий оборудования</p>
+                        </div>
+                        <a href="2024/index.html" class="card-btn">Открыть график 2024 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="quick-stats">
+                <h2><i class="fas fa-tachometer-alt"></i> Быстрый доступ</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-ruler-combined"></i>
+                        <h4>Геометрия</h4>
+                        <p>Линейно-угловые измерения</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-weight-hanging"></i>
+                        <h4>Калибры</h4>
+                        <p>Контрольно-измерительный инструмент</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-broadcast-tower"></i>
+                        <h4>Радиоизмерения</h4>
+                        <p>Радиочастотные измерения</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-microscope"></i>
+                        <h4>НЦСМ</h4>
+                        <p>Национальные стандарты</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-bolt"></i>
+                        <h4>Электроизмерения</h4>
+                        <p>Электрические параметры</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-vial"></i>
+                        <h4>ТСМИ</h4>
+                        <p>Технические средства измерений</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>© 2024 Система управления графиками поверки. Версия 1.0</p>
+            <p>Аналог 1С:Предприятие для метрологической службы</p>
+        </footer>
+    </div>
+</body>
+</html>

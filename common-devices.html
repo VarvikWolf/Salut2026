@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Общий список технических средств</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-tools"></i> Общий список технических средств</h1>
+            <p class="subtitle">Полная база данных всех технических средств предприятия. Всего: <span id="totalCount">524</span> единицы</p>
+        </header>
+
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Главная</a></li>
+                <li><a href="#" onclick="toggleFilters()"><i class="fas fa-filter"></i> Фильтры</a></li>
+                <li><a href="#" onclick="showSearch()"><i class="fas fa-search"></i> Поиск</a></li>
+                <li><a href="#" onclick="exportAllToExcel()"><i class="fas fa-download"></i> Экспорт всех</a></li>
+            </ul>
+        </nav>
+
+        <div id="filtersSection" class="filters" style="display: none;">
+            <h3><i class="fas fa-filter"></i> Фильтры и поиск</h3>
+            <div class="filter-controls">
+                <input type="text" id="searchInput" placeholder="Поиск по наименованию, номеру, отделу..." onkeyup="filterTable()">
+                <select id="categoryFilter" onchange="filterTable()">
+                    <option value="">Все категории</option>
+                    <option value="Геометрия">Геометрия</option>
+                    <option value="Калибры">Калибры</option>
+                    <option value="Радиоизмерения">Радиоизмерения</option>
+                    <option value="НЦСМ">НЦСМ</option>
+                    <option value="НЦСМ на местах">НЦСМ на местах</option>
+                    <option value="Электроизмерения">Электроизмерения</option>
+                    <option value="Испытательное оборудование">Испытательное оборудование</option>
+                    <option value="Щитовые приборы">Щитовые приборы</option>
+                    <option value="ТСМИ">ТСМИ</option>
+                </select>
+                <select id="departmentFilter" onchange="filterTable()">
+                    <option value="">Все отделы</option>
+                    <option value="ОГК">ОГК</option>
+                    <option value="ЦЗЛ">ЦЗЛ</option>
+                    <option value="ОТК">ОТК</option>
+                    <option value="ЛАБ">Лаборатория</option>
+                    <option value="ПРОИЗВ">Производство</option>
+                    <option value="СКЛАД">Склад</option>
+                </select>
+                <select id="statusFilter" onchange="filterTable()">
+                    <option value="">Все статусы</option>
+                    <option value="В работе">В работе</option>
+                    <option value="Резерв">Резерв</option>
+                    <option value="На поверке">На поверке</option>
+                    <option value="Ремонт">Ремонт</option>
+                    <option value="Списание">Списание</option>
+                </select>
+                <button onclick="resetFilters()"><i class="fas fa-redo"></i> Сбросить</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-toolbar">
+                <button class="tool-btn" onclick="showAddModal()"><i class="fas fa-plus"></i> Добавить ТС</button>
+                <button class="tool-btn" onclick="editSelectedDevice()"><i class="fas fa-edit"></i> Редактировать</button>
+                <button class="tool-btn" onclick="deleteSelectedDevice()"><i class="fas fa-trash"></i> Удалить</button>
+                <button class="tool-btn" onclick="saveAllDevices()"><i class="fas fa-save"></i> Сохранить все</button>
+                <button class="tool-btn" onclick="exportAllToExcel()"><i class="fas fa-file-excel"></i> Экспорт в Excel</button>
+                <div style="flex-grow: 1;"></div>
+                <button class="tool-btn" onclick="printAllDevices()"><i class="fas fa-print"></i> Печать списка</button>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="data-table" id="allDevicesTable">
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Категория</th>
+                            <th>Наименование</th>
+                            <th>Тип</th>
+                            <th>Инвентарный номер</th>
+                            <th>Заводской номер</th>
+                            <th>Класс точности/Погрешность</th>
+                            <th>Диапазон измерений</th>
+                            <th>Дата последней поверки</th>
+                            <th>Следующая поверка</th>
+                            <th>Регистрационный номер</th>
+                            <th>Отдел</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Данные будут загружаться динамически -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="pagination">
+            <button id="prevPage" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i></button>
+            <span class="page-info" id="pageInfo">Страница 1 из 1</span>
+            <button id="nextPage" onclick="changePage(1)"><i class="fas fa-chevron-right"></i></button>
+            <span class="total-info" id="totalInfo">Показано 0 из 0 записей</span>
+        </div>
+
+        <footer>
+            <p>© 2024 Общий реестр технических средств. <span id="lastUpdated">Последняя синхронизация: --.--.---- --:--</span></p>
+            <p>Версия базы данных: 3.2.1 | <span id="filteredCount">Всего записей: 0</span></p>
+        </footer>
+    </div>
+
+    <!-- Модальное окно добавления/редактирования -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Добавить техническое средство</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="deviceForm">
+                    <div class="form-group">
+                        <label for="deviceCategory">Категория:</label>
+                        <select id="deviceCategory" required>
+                            <option value="">Выберите категорию</option>
+                            <option value="Геометрия">Геометрия</option>
+                            <option value="Калибры">Калибры</option>
+                            <option value="Радиоизмерения">Радиоизмерения</option>
+                            <option value="НЦСМ">НЦСМ</option>
+                            <option value="НЦСМ на местах">НЦСМ на местах</option>
+                            <option value="Электроизмерения">Электроизмерения</option>
+                            <option value="Испытательное оборудование">Испытательное оборудование</option>
+                            <option value="Щитовые приборы">Щитовые приборы</option>
+                            <option value="ТСМИ">ТСМИ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="deviceName">Наименование:</label>
+                        <input type="text" id="deviceName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deviceType">Тип:</label>
+                        <input type="text" id="deviceType" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inventoryNumber">Инвентарный номер:</label>
+                        <input type="text" id="inventoryNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="factoryNumber">Заводской номер:</label>
+                        <input type="text" id="factoryNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="accuracyClass">Класс точности/Погрешность:</label>
+                        <input type="text" id="accuracyClass" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="measurementRange">Диапазон измерений:</label>
+                        <input type="text" id="measurementRange" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastVerification">Дата последней поверки:</label>
+                        <input type="date" id="lastVerification" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nextVerification">Следующая поверка:</label>
+                        <input type="date" id="nextVerification" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regNumber">Регистрационный номер:</label>
+                        <input type="text" id="regNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Отдел:</label>
+                        <select id="department" required>
+                            <option value="">Выберите отдел</option>
+                            <option value="ОГК">ОГК</option>
+                            <option value="ЦЗЛ">ЦЗЛ</option>
+                            <option value="ОТК">ОТК</option>
+                            <option value="ЛАБ">Лаборатория</option>
+                            <option value="ПРОИЗВ">Производство</option>
+                            <option value="СКЛАД">Склад</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Статус:</label>
+                        <select id="status" required>
+                            <option value="В работе">В работе</option>
+                            <option value="Резерв">Резерв</option>
+                            <option value="На поверке">На поверке</option>
+                            <option value="Ремонт">Ремонт</option>
+                            <option value="Списание">Списание</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Примечание:</label>
+                        <textarea id="notes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Отмена</button>
+                <button class="btn-primary" onclick="saveDevice()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно просмотра -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Просмотр технического средства</h3>
+                <button class="close-modal" onclick="closeViewModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="viewContent">
+                <!-- Контент будет заполнен динамически -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="closeViewModal()">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Глобальные переменные
+        let allDevices = [];
+        let filteredDevices = [];
+        let currentEditIndex = -1;
+        let currentPage = 1;
+        const pageSize = 50;
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAllDevices();
+            setupEventListeners();
+            updateLastUpdated();
+        });
+        
+        // Загрузка всех устройств
+        function loadAllDevices() {
+            const savedData = localStorage.getItem('allDevices');
+            if (savedData) {
+                allDevices = JSON.parse(savedData);
+            } else {
+                // Генерация тестовых данных
+                generateTestData();
+            }
+            filteredDevices = [...allDevices];
+            renderTable();
+            updatePagination();
+        }
+        
+        // Генерация тестовых данных
+        function generateTestData() {
+            const categories = [
+                { name: 'Геометрия', count: 24 },
+                { name: 'Калибры', count: 18 },
+                { name: 'Радиоизмерения', count: 15 },
+                { name: 'НЦСМ', count: 8 },
+                { name: 'НЦСМ на местах', count: 12 },
+                { name: 'Электроизмерения', count: 32 },
+                { name: 'Испытательное оборудование', count: 14 },
+                { name: 'Щитовые приборы', count: 22 },
+                { name: 'ТСМИ', count: 28 }
+            ];
+            
+            const departments = ['ОГК', 'ЦЗЛ', 'ОТК', 'ЛАБ', 'ПРОИЗВ', 'СКЛАД'];
+            const statuses = ['В работе', 'Резерв', 'На поверке', 'Ремонт', 'Списание'];
+            
+            allDevices = [];
+            let id = 1;
+            
+            categories.forEach(category => {
+                for(let i = 0; i < category.count; i++) {
+                    const device = {
+                        id: id,
+                        category: category.name,
+                        name: `${category.name} устройство ${i+1}`,
+                        type: `Тип-${id}`,
+                        inventory: `ИНВ-${String(id).padStart(3, '0')}`,
+                        factory: `ЗАВ-${String(id).padStart(6, '0')}`,
+                        accuracy: (Math.random() * 0.1).toFixed(3),
+                        range: `0-${Math.floor(Math.random() * 1000)} ед.`,
+                        lastVerification: `${(15 + i%30).toString().padStart(2, '0')}.${(1 + i%11).toString().padStart(2, '0')}.2024`,
+                        nextVerification: `${(15 + i%30).toString().padStart(2, '0')}.${(1 + i%11).toString().padStart(2, '0')}.2025`,
+                        regNumber: `РН-2024-${String(id).padStart(3, '0')}`,
+                        department: departments[i % departments.length],
+                        status: statuses[i % statuses.length],
+                        notes: i % 3 === 0 ? 'Требуется поверка' : 'В эксплуатации'
+                    };
+                    allDevices.push(device);
+                    id++;
+                }
+            });
+            
+            saveAllDevices();
+        }
+        
+        // Сохранение всех устройств
+        function saveAllDevices() {
+            localStorage.setItem('allDevices', JSON.stringify(allDevices));
+            updateLastUpdated();
+        }
+        
+        // Отображение таблицы
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const pageDevices = filteredDevices.slice(startIndex, endIndex);
+            
+            pageDevices.forEach((device, index) => {
+                const globalIndex = startIndex + index;
+                const tr = document.createElement('tr');
+                tr.dataset.index = globalIndex;
+                
+                tr.innerHTML = `
+                    <td>${device.id}</td>
+                    <td>
+                        <select class="table-select" onchange="updateDeviceField(${globalIndex}, 'category', this)">
+                            <option ${device.category === 'Геометрия' ? 'selected' : ''}>Геометрия</option>
+                            <option ${device.category === 'Калибры' ? 'selected' : ''}>Калибры</option>
+                            <option ${device.category === 'Радиоизмерения' ? 'selected' : ''}>Радиоизмерения</option>
+                            <option ${device.category === 'НЦСМ' ? 'selected' : ''}>НЦСМ</option>
+                            <option ${device.category === 'НЦСМ на местах' ? 'selected' : ''}>НЦСМ на местах</option>
+                            <option ${device.category === 'Электроизмерения' ? 'selected' : ''}>Электроизмерения</option>
+                            <option ${device.category === 'Испытательное оборудование' ? 'selected' : ''}>Испытательное оборудование</option>
+                            <option ${device.category === 'Щитовые приборы' ? 'selected' : ''}>Щитовые приборы</option>
+                            <option ${device.category === 'ТСМИ' ? 'selected' : ''}>ТСМИ</option>
+                        </select>
+                    </td>
+                    <td contenteditable="true" onblur="updateDeviceField(${globalIndex}, 'name', this)">${device.name}</td>
+                    <td contenteditable="true" onblur="updateDeviceField(${globalIndex}, 'type', this)">${device.type}</td>
+                    <td contenteditable="true" onblur="updateDeviceField(${globalIndex}, 'inventory', this)">${device.inventory}</td>
+                    <td contenteditable="true" onblur="updateDeviceField(${globalIndex}, 'factory', this)">${device.factory}</td>
+                    <td contenteditable="true" onblur="updateDeviceField(${globalIndex}, 'accuracy', this)">${device.accuracy}</td>
+                    <td contenteditable="true" onblur="updateDeviceField(${globalIndex}, 'range', this)">${device.range}</td>
+                    <td contenteditable="true" onblur="updateDeviceField(${globalIndex}, 'lastVerification', this)">${device.lastVerification}</td>
+                    <td contenteditable="true" onblur="updateDeviceField(${globalIndex}, 'nextVerification', this)">${device.nextVerification}</td>
+                    <td contenteditable="true" onblur="updateDeviceField(${globalIndex}, 'regNumber', this)">${device.regNumber}</td>
+                    <td>
+                        <select class="table-select" onchange="updateDeviceField(${globalIndex}, 'department', this)">
+                            <option ${device.department === 'ОГК' ? 'selected' : ''}>ОГК</option>
+                            <option ${device.department === 'ЦЗЛ' ? 'selected' : ''}>ЦЗЛ</option>
+                            <option ${device.department === 'ОТК' ? 'selected' : ''}>ОТК</option>
+                            <option ${device.department === 'ЛАБ' ? 'selected' : ''}>ЛАБ</option>
+                            <option ${device.department === 'ПРОИЗВ' ? 'selected' : ''}>ПРОИЗВ</option>
+                            <option ${device.department === 'СКЛАД' ? 'selected' : ''}>СКЛАД</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="table-select" onchange="updateDeviceField(${globalIndex}, 'status', this)">
+                            <option ${device.status === 'В работе' ? 'selected' : ''}>В работе</option>
+                            <option ${device.status === 'Резерв' ? 'selected' : ''}>Резерв</option>
+                            <option ${device.status === 'На поверке' ? 'selected' : ''}>На поверке</option>
+                            <option ${device.status === 'Ремонт' ? 'selected' : ''}>Ремонт</option>
+                            <option ${device.status === 'Списание' ? 'selected' : ''}>Списание</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="action-btn view" title="Просмотр" onclick="viewDevice(${globalIndex})"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn edit" title="Редактировать" onclick="editDevice(${globalIndex})"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete" title="Удалить" onclick="deleteDevice(${globalIndex})"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+            
+            updateCounts();
+        }
+        
+        // Обновление поля устройства
+        function updateDeviceField(index, field, element) {
+            allDevices[index][field] = element.value || element.textContent;
+            saveAllDevices();
+            // Если это отфильтрованные данные, обновляем и их
+            const filteredIndex = filteredDevices.findIndex(d => d.id === allDevices[index].id);
+            if (filteredIndex !== -1) {
+                filteredDevices[filteredIndex][field] = allDevices[index][field];
+            }
+        }
+        
+        // Фильтрация таблицы
+        function filterTable() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const department = document.getElementById('departmentFilter').value;
+            const status = document.getElementById('statusFilter').value;
+            
+            filteredDevices = allDevices.filter(device => {
+                const matchesSearch = !searchText || 
+                    device.name.toLowerCase().includes(searchText) ||
+                    device.inventory.toLowerCase().includes(searchText) ||
+                    device.factory.toLowerCase().includes(searchText) ||
+                    device.regNumber.toLowerCase().includes(searchText) ||
+                    device.department.toLowerCase().includes(searchText);
+                
+                const matchesCategory = !category || device.category === category;
+                const matchesDepartment = !department || device.department === department;
+                const matchesStatus = !status || device.status === status;
+                
+                return matchesSearch && matchesCategory && matchesDepartment && matchesStatus;
+            });
+            
+            currentPage = 1;
+            renderTable();
+            updatePagination();
+        }
+        
+        // Сброс фильтров
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('departmentFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            filteredDevices = [...allDevices];
+            currentPage = 1;
+            renderTable();
+            updatePagination();
+        }
+        
+        // Показать/скрыть фильтры
+        function toggleFilters() {
+            const filtersSection = document.getElementById('filtersSection');
+            filtersSection.style.display = filtersSection.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Показать поиск
+        function showSearch() {
+            const filtersSection = document.getElementById('filtersSection');
+            filtersSection.style.display = 'block';
+            document.getElementById('searchInput').focus();
+        }
+        
+        // Пагинация
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredDevices.length / pageSize);
+            document.getElementById('pageInfo').textContent = `Страница ${currentPage} из ${totalPages}`;
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages || totalPages === 0;
+        }
+        
+        function changePage(delta) {
+            const totalPages = Math.ceil(filteredDevices.length / pageSize);
+            const newPage = currentPage + delta;
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                renderTable();
+                updatePagination();
+            }
+        }
+        
+        // Добавление устройства
+        function showAddModal() {
+            currentEditIndex = -1;
+            document.getElementById('modalTitle').textContent = 'Добавить техническое средство';
+            document.getElementById('deviceForm').reset();
+            document.getElementById('editModal').style.display = 'flex';
+        }
+        
+        // Редактирование устройства
+        function editDevice(index) {
+            currentEditIndex = index;
+            const device = allDevices[index];
+            
+            document.getElementById('modalTitle').textContent = 'Редактировать техническое средство';
+            document.getElementById('deviceCategory').value = device.category;
+            document.getElementById('deviceName').value = device.name;
+            document.getElementById('deviceType').value = device.type;
+            document.getElementById('inventoryNumber').value = device.inventory;
+            document.getElementById('factoryNumber').value = device.factory;
+            document.getElementById('accuracyClass').value = device.accuracy;
+            document.getElementById('measurementRange').value = device.range;
+            
+            // Преобразование даты
+            const lastDateParts = device.lastVerification.split('.');
+            if (lastDateParts.length === 3) {
+                document.getElementById('lastVerification').value = `${lastDateParts[2]}-${lastDateParts[1].padStart(2, '0')}-${lastDateParts[0].padStart(2, '0')}`;
+            }
+            
+            const nextDateParts = device.nextVerification.split('.');
+            if (nextDateParts.length === 3) {
+                document.getElementById('nextVerification').value = `${nextDateParts[2]}-${nextDateParts[1].padStart(2, '0')}-${nextDateParts[0].padStart(2, '0')}`;
+            }
+            
+            document.getElementById('regNumber').value = device.regNumber;
+            document.getElementById('department').value = device.department;
+            document.getElementById('status').value = device.status;
+            document.getElementById('notes').value = device.notes || '';
+            
+            document.getElementById('editModal').style.display = 'flex';
+        }
+        
+        // Редактирование выбранного устройства
+        function editSelectedDevice() {
+            const selectedRow = document.querySelector('#tableBody tr.selected');
+            if (selectedRow) {
+                const index = parseInt(selectedRow.dataset.index);
+                editDevice(index);
+            } else {
+                showMessage('Выберите устройство для редактирования!', 'error');
+            }
+        }
+        
+        // Сохранение устройства
+        function saveDevice() {
+            const form = document.getElementById('deviceForm');
+            if (!form.checkValidity()) {
+                showMessage('Заполните все обязательные поля!', 'error');
+                return;
+            }
+            
+            const newId = currentEditIndex === -1 ? Math.max(...allDevices.map(d => d.id)) + 1 : allDevices[currentEditIndex].id;
+            
+            const device = {
+                id: newId,
+                category: document.getElementById('deviceCategory').value,
+                name: document.getElementById('deviceName').value,
+                type: document.getElementById('deviceType').value,
+                inventory: document.getElementById('inventoryNumber').value,
+                factory: document.getElementById('factoryNumber').value,
+                accuracy: document.getElementById('accuracyClass').value,
+                range: document.getElementById('measurementRange').value,
+                lastVerification: formatDate(document.getElementById('lastVerification').value),
+                nextVerification: formatDate(document.getElementById('nextVerification').value),
+                regNumber: document.getElementById('regNumber').value,
+                department: document.getElementById('department').value,
+                status: document.getElementById('status').value,
+                notes: document.getElementById('notes').value
+            };
+            
+            if (currentEditIndex === -1) {
+                // Добавление нового устройства
+                allDevices.push(device);
+            } else {
+                // Редактирование существующего
+                allDevices[currentEditIndex] = device;
+            }
+            
+            saveAllDevices();
+            filterTable(); // Перефильтруем, чтобы обновить отображение
+            closeModal();
+            showMessage('Устройство успешно сохранено!', 'success');
+        }
+        
+        // Удаление устройства
+        function deleteDevice(index) {
+            if (confirm('Вы уверены, что хотите удалить это устройство?')) {
+                const deviceId = allDevices[index].id;
+                allDevices.splice(index, 1);
+                saveAllDevices();
+                filterTable();
+                showMessage('Устройство удалено!', 'success');
+            }
+        }
+        
+        // Удаление выбранного устройства
+        function deleteSelectedDevice() {
+            const selectedRow = document.querySelector('#tableBody tr.selected');
+            if (selectedRow) {
+                const index = parseInt(selectedRow.dataset.index);
+                deleteDevice(index);
+            } else {
+                showMessage('Выберите устройство для удаления!', 'error');
+            }
+        }
+        
+        // Просмотр устройства
+        function viewDevice(index) {
+            const device = allDevices[index];
+            const content = document.getElementById('viewContent');
+            
+            content.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div><strong>ID:</strong> ${device.id}</div>
+                    <div><strong>Категория:</strong> ${device.category}</div>
+                    <div><strong>Наименование:</strong> ${device.name}</div>
+                    <div><strong>Тип:</strong> ${device.type}</div>
+                    <div><strong>Инвентарный номер:</strong> ${device.inventory}</div>
+                    <div><strong>Заводской номер:</strong> ${device.factory}</div>
+                    <div><strong>Класс точности:</strong> ${device.accuracy}</div>
+                    <div><strong>Диапазон измерений:</strong> ${device.range}</div>
+                    <div><strong>Дата последней поверки:</strong> ${device.lastVerification}</div>
+                    <div><strong>Следующая поверка:</strong> ${device.nextVerification}</div>
+                    <div><strong>Регистрационный номер:</strong> ${device.regNumber}</div>
+                    <div><strong>Отдел:</strong> ${device.department}</div>
+                    <div><strong>Статус:</strong> ${device.status}</div>
+                    <div><strong>Примечание:</strong> ${device.notes || 'нет'}</div>
+                </div>
+                <div style="margin-top: 20px; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                    <small>Дата добавления: ${new Date().toLocaleDateString()} | Последнее изменение: ${new Date().toLocaleDateString()}</small>
+                </div>
+            `;
+            
+            document.getElementById('viewModal').style.display = 'flex';
+        }
+        
+        // Экспорт всех данных в Excel
+        function exportAllToExcel() {
+            try {
+                const exportData = filteredDevices.map(device => ({
+                    'ID': device.id,
+                    'Категория': device.category,
+                    'Наименование': device.name,
+                    'Тип': device.type,
+                    'Инвентарный номер': device.inventory,
+                    'Заводской номер': device.factory,
+                    'Класс точности/Погрешность': device.accuracy,
+                    'Диапазон измерений': device.range,
+                    'Дата последней поверки': device.lastVerification,
+                    'Следующая поверка': device.nextVerification,
+                    'Регистрационный номер': device.regNumber,
+                    'Отдел': device.department,
+                    'Статус': device.status,
+                    'Примечание': device.notes || ''
+                }));
+                
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.json_to_sheet(exportData);
+                
+                // Настраиваем ширину столбцов
+                const wscols = [
+                    {wch: 5},   // ID
+                    {wch: 15},  // Категория
+                    {wch: 30},  // Наименование
+                    {wch: 15},  // Тип
+                    {wch: 15},  // Инвентарный номер
+                    {wch: 15},  // Заводской номер
+                    {wch: 20},  // Класс точности
+                    {wch: 20},  // Диапазон
+                    {wch: 15},  // Последняя поверка
+                    {wch: 15},  // Следующая поверка
+                    {wch: 20},  // Рег. номер
+                    {wch: 10},  // Отдел
+                    {wch: 15},  // Статус
+                    {wch: 30}   // Примечание
+                ];
+                ws['!cols'] = wscols;
+                
+                XLSX.utils.book_append_sheet(wb, ws, "Все_ТС");
+                
+                const date = new Date().toISOString().split('T')[0];
+                XLSX.writeFile(wb, `Все_технические_средства_${date}.xlsx`);
+                
+                showMessage('Все данные экспортированы в Excel!', 'success');
+            } catch (error) {
+                console.error('Ошибка при экспорте:', error);
+                showMessage('Ошибка при экспорте в Excel!', 'error');
+            }
+        }
+        
+        // Печать всех устройств
+        function printAllDevices() {
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Общий список ТС - Печать</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            h1 { color: #2c3e50; }
+                            table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+                            th, td { border: 1px solid #ddd; padding: 6px; text-align: left; }
+                            th { background-color: #f2f2f2; }
+                            @media print {
+                                .no-print { display: none; }
+                                @page { size: landscape; }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Общий список технических средств</h1>
+                        <p>Дата печати: ${new Date().toLocaleDateString()}</p>
+                        <p>Всего единиц: ${filteredDevices.length}</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Категория</th>
+                                    <th>Наименование</th>
+                                    <th>Тип</th>
+                                    <th>Инв. номер</th>
+                                    <th>Зав. номер</th>
+                                    <th>Класс точности</th>
+                                    <th>Диапазон</th>
+                                    <th>Посл. поверка</th>
+                                    <th>След. поверка</th>
+                                    <th>Рег. номер</th>
+                                    <th>Отдел</th>
+                                    <th>Статус</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${filteredDevices.map(device => `
+                                    <tr>
+                                        <td>${device.id}</td>
+                                        <td>${device.category}</td>
+                                        <td>${device.name}</td>
+                                        <td>${device.type}</td>
+                                        <td>${device.inventory}</td>
+                                        <td>${device.factory}</td>
+                                        <td>${device.accuracy}</td>
+                                        <td>${device.range}</td>
+                                        <td>${device.lastVerification}</td>
+                                        <td>${device.nextVerification}</td>
+                                        <td>${device.regNumber}</td>
+                                        <td>${device.department}</td>
+                                        <td>${device.status}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <div style="margin-top: 30px; font-size: 10px; color: #666;">
+                            <p>Сгенерировано системой управления графиками поверки</p>
+                        </div>
+                        <button class="no-print" onclick="window.print()" style="margin-top: 20px; padding: 10px 20px;">Печать</button>
+                        <button class="no-print" onclick="window.close()" style="margin-top: 20px; padding: 10px 20px;">Закрыть</button>
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+        
+        // Вспомогательные функции
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`;
+        }
+        
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+        
+        function closeViewModal() {
+            document.getElementById('viewModal').style.display = 'none';
+        }
+        
+        function showMessage(text, type) {
+            const oldMessage = document.querySelector('.message');
+            if (oldMessage) oldMessage.remove();
+            
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.textContent = text;
+            document.body.appendChild(message);
+            
+            setTimeout(() => message.remove(), 3000);
+        }
+        
+        function updateLastUpdated() {
+            const now = new Date();
+            const formattedDate = `${now.getDate().toString().padStart(2, '0')}.${(now.getMonth() + 1).toString().padStart(2, '0')}.${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+            document.getElementById('lastUpdated').textContent = `Последняя синхронизация: ${formattedDate}`;
+        }
+        
+        function updateCounts() {
+            const totalCount = allDevices.length;
+            const filteredCount = filteredDevices.length;
+            const startIndex = (currentPage - 1) * pageSize + 1;
+            const endIndex = Math.min(startIndex + pageSize - 1, filteredCount);
+            
+            document.getElementById('totalCount').textContent = totalCount;
+            document.getElementById('filteredCount').textContent = `Показано: ${filteredCount} из ${totalCount}`;
+            document.getElementById('totalInfo').textContent = `Показано ${startIndex}-${endIndex} из ${filteredCount} записей`;
+        }
+        
+        function setupEventListeners() {
+            // Выделение строк
+            document.getElementById('tableBody').addEventListener('click', function(e) {
+                const row = e.target.closest('tr');
+                if (row && !e.target.closest('td:last-child')) {
+                    document.querySelectorAll('#tableBody tr').forEach(r => r.classList.remove('selected'));
+                    row.classList.add('selected');
+                }
+            });
+            
+            // Закрытие модальных окон
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
+                }
+            });
+            
+            // Автосохранение при изменении
+            document.getElementById('tableBody').addEventListener('blur', function(e) {
+                if (e.target.hasAttribute('contenteditable')) {
+                    setTimeout(saveAllDevices, 100);
+                }
+            });
+            
+            // Горячие клавиши
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey) {
+                    switch(e.key.toLowerCase()) {
+                        case 'n':
+                            e.preventDefault();
+                            showAddModal();
+                            break;
+                        case 'f':
+                            e.preventDefault();
+                            showSearch();
+                            break;
+                        case 'e':
+                            e.preventDefault();
+                            editSelectedDevice();
+                            break;
+                        case 'd':
+                            e.preventDefault();
+                            deleteSelectedDevice();
+                            break;
+                        case 's':
+                            e.preventDefault();
+                            saveAllDevices();
+                            break;
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
